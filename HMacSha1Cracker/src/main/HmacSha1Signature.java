@@ -43,7 +43,7 @@ public class HmacSha1Signature {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String hmac = calculateRFC2104HMAC("hola", "0000000A");
+		String hmac = calculateRFC2104HMAC("hola", "0000000a");
 
 		System.out.println(hmac);
 		assert hmac.equals("104152c5bfdca07bc633eebd46199f0255c9f49d");

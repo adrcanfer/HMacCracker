@@ -4,40 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KeyGenerator {
+	
+	public static void main(String[] args) {
+		String[] elementos = "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f".split(",");
+		int n = 6; // Tipos para escoger
+		int r = elementos.length; // Elementos elegidos
+		generate(elementos, "", n, r);
+	}
 
-	static int count = 0;
-
-	public static List<String> combinaciones(String primero, String cadena, int lenght) {
-		List<String> res = new ArrayList<>();
-		if (cadena.length() == 2) {
-			count = count + 2;
-			System.out.println(primero + cadena.charAt(1) + "" + cadena.charAt(0));
-			System.out.println(primero + cadena.charAt(0) + "" + cadena.charAt(1));
+	public static List<String> generate(String[] elem, String act, int n, int r) {
+		List<String> res = new ArrayList<String>();
+		if (n == 0) {
+			res.add(act);
+			System.out.println(act);
 		} else {
-			for (int i = 0; i < cadena.length(); i++) {
-				combinaciones(primero + cadena.charAt(i), quitarLetra(cadena, i), lenght);
+			for (int i = 0; i < r; i++) {
+				generate(elem, act + elem[i] + "", n - 1, r);
 			}
 		}
 		return res;
 	}
-
-	public static String quitarLetra(String cadena, int i) {
-		if (i == 0) {
-			return cadena.substring(i + 1, cadena.length());
-		} else {
-			if (i == cadena.length()) {
-				return cadena.substring(0, cadena.length() - 1);
-			} else {
-				return cadena.substring(0, i) + cadena.substring(i + 1, cadena.length());
-			}
-		}
-	}
-
-	public static void main(String args[]) {
-		String cadena = "abcde";
-		System.out.println("combinaciones de :" + cadena);
-		combinaciones("", cadena, 1);
-		System.out.println("total:" + count);
-	}
-
 }
