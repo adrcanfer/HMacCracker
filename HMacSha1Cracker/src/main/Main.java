@@ -1,18 +1,18 @@
 package main;
 
+import algorithm.HMacDecode;
+import algorithm.HMacEncode;
+import algorithm.Utils;
+
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class Main {
 	static String message = "34567891 987654 300";
 	static String mac = "ada141975ed739fe27e50cab4b5dd5a7c96553b1";
 	static long start = System.currentTimeMillis();
 	
-	public static void main(String[] args) throws InvalidKeyException, SignatureException, NoSuchAlgorithmException {
+	/*public static void main(String[] args) throws InvalidKeyException, SignatureException, NoSuchAlgorithmException {
 		System.out.println("Generando claves");
 		String[] elementos = "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f".split(",");
         int n = 8;                  //Tipos para escoger
@@ -41,8 +41,16 @@ public class Main {
 			}
 		}
 		return key;
+
+
+	}*/
+
+	public static void main(String[] args) throws InvalidKeyException, NoSuchAlgorithmException {
+		HMacEncode hMacEncode = new HMacEncode("HmacSHA1", "hola");
+		String hmac = hMacEncode.generateHMAC();
+		HMacDecode hMacDecode = new HMacDecode("HmacSHA1", "hola", hmac);
+		String key = hMacDecode.hackKey();
+		System.out.println(key);
 	}
-	
-	
 
 }
