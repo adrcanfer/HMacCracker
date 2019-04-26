@@ -1,7 +1,9 @@
 package algorithm;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.List;
 
 public class Utils {
     public static String hexToString(byte[] bytes) {

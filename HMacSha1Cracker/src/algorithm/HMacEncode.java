@@ -3,6 +3,7 @@ package algorithm;
 import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -11,33 +12,26 @@ import static algorithm.Utils.hexToString;
 public class HMacEncode {
     private String hmac_algorithm;
     private String message;
-    private SecretKey key;
+    private String key;
 
-    public HMacEncode(String hmac_algorimth, String message){
-        this.hmac_algorithm = hmac_algorimth;
+    public HMacEncode(String hmac_algorithm, String key, String message){
+        this.hmac_algorithm = hmac_algorithm;
+        this.key = key;
         this.message = message;
     }
 
     public String generateHMAC() throws NoSuchAlgorithmException, InvalidKeyException {
         Mac mac = Mac.getInstance(hmac_algorithm);
-
-        mac.init(getKey());
+        SecretKeySpec signingKey = new SecretKeySpec(key.getBytes(), hmac_algorithm);
+        mac.init(signingKey);
         mac.update(message.getBytes());
         byte[] hmac = mac.doFinal();
-        System.out.println(hmac.toString());
         return hexToString(hmac);
     }
 
-    public SecretKey getKey() throws NoSuchAlgorithmException {
-        if(key == null){
-            KeyGenerator keyGenerator= KeyGenerator.getInstance(hmac_algorithm);
-            SecretKey secretKey = keyGenerator.generateKey();
-            key = secretKey;
-        }
+    public String getKey() throws NoSuchAlgorithmException {
         return key;
     }
 
-    public String getKeyString() throws NoSuchAlgorithmException {
-        return getKey().toString();
-    }
+
 }

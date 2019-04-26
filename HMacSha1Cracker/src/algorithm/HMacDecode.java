@@ -1,40 +1,39 @@
 package algorithm;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-
-import static algorithm.Utils.hexToString;
+import java.util.List;
 
 public class HMacDecode {
     private String hmac_algorithm;
     private String message;
     private String hmac;
 
-    public HMacDecode(String hmac_algorimth, String message, String hmac){
-        this.hmac_algorithm = hmac_algorimth;
+    public HMacDecode(String hmac_algorithm, String message, String hmac){
+        this.hmac_algorithm = hmac_algorithm;
         this.message = message;
         this.hmac = hmac;
     }
 
-    public String hackKey() throws NoSuchAlgorithmException, InvalidKeyException {
+    public String hackKey(String[] elem, int n, int r) throws NoSuchAlgorithmException, InvalidKeyException {
         boolean status = false;
-        String key = "";
-        while (!status){
-            Mac mac = Mac.getInstance(hmac_algorithm);
-            KeyGenerator keyGenerator= KeyGenerator.getInstance(hmac_algorithm);
-            SecretKey secretKey = keyGenerator.generateKey();
-            mac.init(secretKey);
-            mac.update(message.getBytes());
-            byte[] hmac = mac.doFinal();
-            if(hexToString(hmac).equals(hmac)){
-                key = secretKey.toString();
-                break;
+        String res = "";
+        System.out.println("Generating keys...........");
+        KeyGenerator keyGenerator = new KeyGenerator();
+        List<String> keys = keyGenerator.generateKey(elem, "", n, r);
+        System.out.println(keys.size());
+        System.out.println("Generation finished.");
+        System.out.println("Calculating hmac..........");
+        for (String key: keys){
+            HMacEncode hMacEncode = new HMacEncode(hmac_algorithm, key, message);
+            String calculatedHMac = hMacEncode.generateHMAC();
+            if(calculatedHMac.equals(hmac)){
+               res = key;
+               System.out.println("Found key.");
+               break;
             }
         }
-        return key;
+        return res;
     }
 
 }
